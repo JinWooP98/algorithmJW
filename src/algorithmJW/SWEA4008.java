@@ -66,12 +66,19 @@ public class SWEA4008 {
 		int operator = -1;
 		for(int i=0; i<N-1; i++) {
 			if(selected[i]) continue;
+			// 전에 쓴 연산자면 넘기기(가지치기)
 			if(operator == oper[i])continue;
+			
 			int pre = numbers[depth+1];
+			
 			operator = oper[i];
+			
 			selected[i] = true;
+			
 			int n = calc(num, pre, operator);
+			
 			dfs(depth+1, n);
+			
 			selected[i] = false;
 		}
 		
