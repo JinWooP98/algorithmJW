@@ -2,10 +2,9 @@ package algorithmJW;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
-
-import jdk.internal.org.jline.utils.InputStreamReader;
 
 public class SWEA1251 {
 	
@@ -59,8 +58,8 @@ public class SWEA1251 {
 			
 			for(int i=1; i<N; i++) {
 				for(int j=i+1; j<=N; j++) {
-					int dx = islands[i][0] - islands[j][0];
-					int dy = islands[i][1] - islands[j][1];
+					long dx = islands[i][0] - islands[j][0];
+					long dy = islands[i][1] - islands[j][1];
 					double len = Math.sqrt(dx*dx + dy * dy);
 					double c = tex * (len * len);
 					pq.offer(new Bridge(i,j,c));
@@ -82,7 +81,9 @@ public class SWEA1251 {
 				n++;
 			}
 			
-			sb.append("#").append(t+1).append(" ").append(answer).append("\n");
+			long a = Math.round(answer);
+			
+			sb.append("#").append(t+1).append(" ").append(a).append("\n");
 		}
 		System.out.println(sb);
 	}
