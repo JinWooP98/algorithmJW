@@ -40,6 +40,7 @@ public class SWEA6782 {
 			// 만약 수가 20이라면
 			// rootN = 4
 			// 25까지 N+1을 해주어야 하므로
+			// 다음 제곱근은 (rootN+1), 즉 다음 N = (rootN+1) * (rootN+1)
 			// cnt에 (25-20)을 더해줌
 			long next = rootN + 1;
 			long nextNum = next * next;
