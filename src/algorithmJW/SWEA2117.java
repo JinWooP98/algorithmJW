@@ -39,7 +39,7 @@ public class SWEA2117 {
 			}
 			K = 1;
 			while(true) {
-				if(cost * houseNum <= (K*K + (K-1)*(K-1))) {
+				if(cost * houseNum < (K*K + (K-1)*(K-1))) {
 					K--;
 					break;
 				}
