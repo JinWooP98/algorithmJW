@@ -13,6 +13,7 @@ public class SWEA2112 {
 	static boolean[] accepted;
 	
 	static int answer;
+	static int[] type;
 	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -26,6 +27,11 @@ public class SWEA2112 {
 			W = Integer.parseInt(st.nextToken());
 			K = Integer.parseInt(st.nextToken());
 			
+			type = new int[D];
+			for(int i=0; i<D; i++) {
+				type[i] = -1;
+			}
+			
 			cells = new int[D][W];
 			for(int i=0; i<D; i++) {
 				st = new StringTokenizer(in.readLine().trim());
@@ -34,86 +40,70 @@ public class SWEA2112 {
 				}
 			}
 			answer = K;
-			
-			if(!checkCell()) {
-			    dfs(0, 0);
-			} else {
-			    answer = 0;
-			}
+			dfs(0,0);
 			
 			sb.append("#").append(t+1).append(" ").append(answer).append("\n");
 		}
 		System.out.println(sb);
 	}
 	
-	static public void dfs(int depth, int idx) {
-		if(depth >= answer) return;
-		
-		if(idx == D) return;
-		
-		for(int i=idx; i<D; i++) {
-			int[] temp = cells[i].clone();
-			
-			// A 약품 투입
-	        injectMedicine(i, 0);
-
-	        if(checkCell()) {
-	            answer = Math.min(answer, depth + 1);
-	        } else if(depth + 1 < answer) {
-	            dfs(depth + 1, i + 1);
-	        }
-
-	        // B 약품 투입
-	        injectMedicine(i, 1);
-
-	        if(checkCell()) {
-	            answer = Math.min(answer, depth + 1);
-	        } else if(depth + 1 < answer) {
-	            dfs(depth + 1, i + 1);
-	        }
-			
-			cells[i] = temp;
+	static public void dfs(int depth, int cnt) {
+		if(cnt > answer) return;
+		if(depth == D) {
+			// 여기에서 검사하기
+			if(checkCells()) {
+				answer = cnt;
+			}
+			return;
 		}
+		// 약품투여 X
+		dfs(depth+1, cnt);
+		// A약품투여
+		type[depth] = 0;
+		dfs(depth+1, cnt+1);
+		// B약품투여
+		type[depth] = 1;
+		dfs(depth+1, cnt+1);
+		
+		type[depth] = -1;
 	}
 	
-	static public boolean checkCell() {
-		
-		accepted = new boolean[W];
+	static public boolean checkCells() {
 		
 		for(int i=0; i<W; i++) {
-			int cnt = 0;
-			int type = -1;
+			
+			int aCnt = 0;
+			int bCnt = 0;
+			boolean isPass = false;
+			
 			for(int j=0; j<D; j++) {
-				
-				if(cells[j][i] == type) {
-					cnt++;
+				if(type[j] == -1) {
+					if(cells[j][i] == 0) {
+						aCnt++;
+						bCnt = 0;
+					} else {
+						bCnt++;
+						aCnt = 0;
+					}
 				} else {
-					cnt = 1;
-					type = cells[j][i];
+					if(type[j] == 0) {
+						aCnt++;
+						bCnt = 0;
+					} else {
+						bCnt++;
+						aCnt = 0;
+					}
 				}
 				
-				if(cnt == K) {
-					accepted[i] = true;
+				if(aCnt == K || bCnt == K) {
+					isPass = true;
 					break;
 				}
 			}
+			
+			if(!isPass) return false;
 		}
 		
-		boolean isAccept = true;
-		
-		for(int i=0; i<W; i++) {
-			if(!accepted[i]) {
-				isAccept = false;
-				break;
-			}
-		}
-		
-		return isAccept;
-	}
-	
-	static public void injectMedicine(int idx, int type) {
-		for(int i=0; i<W; i++) {
-			cells[idx][i] = type;
-		}
+		return true;
 	}
 }
