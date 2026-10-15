@@ -109,7 +109,7 @@ public class 퍼즐조각채우기 {
                 if(!((tr == br && tc == bc) || (tr == bc && tc == br))) continue;
                 
                 for(int k=0; k<4; k++) {
-                	
+                	isIn = true;
                 	for(int c=0; c<t.size(); c++) {
                 		if(!(t.get(c)[0] == b.get(c)[0] && t.get(c)[1] == b.get(c)[1])) {
                 			isIn = false;
@@ -188,5 +188,28 @@ public class 퍼즐조각채우기 {
     static void rotateShape(List<int[]> block) {
         // 도형 90도 회전
     	
+    	int minX = Integer.MAX_VALUE;
+    	int minY = Integer.MAX_VALUE;
+    	
+    	for(int i=0; i<block.size(); i++) {
+    		int r = block.get(i)[0];
+    		int c = block.get(i)[1];
+    		
+    		if(minX > c) minX = c;
+    		if(minY > -r) minY = -r;
+    		
+    		block.get(i)[0] = c;
+    		block.get(i)[1] = -r;
+    	}
+    	
+    	for(int i=0; i<block.size(); i++) {
+    		block.get(i)[0] -= minX;
+    		block.get(i)[1] -= minY;
+    	}
+    	
+    	block.sort((a, b) -> {
+            if(a[0] != b[0]) return Integer.compare(a[0], b[0]);
+            return Integer.compare(a[1], b[1]);
+        });
     }
 }
